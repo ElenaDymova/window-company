@@ -1,6 +1,11 @@
-const forms = () => {
+//импортируем checkNumInputs чтобы можно было использовать эту функцию прямо хдесь
+import checkNumInputs from './checkNumInputs';
+
+const forms = (state) => {
 	const form = document.querySelectorAll('form'), //получаем все формы кот есть на странице
 		inputs = document.querySelectorAll('input'); //получаем все инпуты
+
+	checkNumInputs('input[name="user_phone"]'); //проверяем что в инпуте с телефоном введены цифры
 
 	const message = {
 		loading: 'Загрузка...',
@@ -40,6 +45,11 @@ const forms = () => {
 			//собирае данные, кот есть в форме
 			const formData = new FormData(item); //создаем переменную, внутри конструктор; (item) - откуда беремеданные
 			//этот объект найдет все импуты. соберет все данные в спец структуру и поместит в переменную
+			if (item.getAttribute('data-calc') === "end") {
+				for (let key in state) {
+					formData.append(key, state[key]);
+				}
+			}
 
 			postData('assets/server.php', formData)
 				.then(res => {
